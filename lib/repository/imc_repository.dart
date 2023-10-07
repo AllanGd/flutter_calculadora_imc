@@ -10,4 +10,8 @@ class IMCRepository {
   void remover(String id) {
     _imcs.remove(_imcs.where((element) => element.id == id).first);
   }
+
+  List<IMC> listar() {
+    return _imcs;
+  }
 }

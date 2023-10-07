@@ -20,4 +20,8 @@ class IMC {
   set altura(double altura) {
     _altura = altura;
   }
+
+  double valor() {
+    return double.parse((_peso / (_altura * _altura)).toStringAsFixed(2));
+  }
 }
