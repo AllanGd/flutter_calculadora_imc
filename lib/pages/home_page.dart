@@ -1,4 +1,5 @@
 import 'package:calculadora_imc/model/imc.dart';
+import 'package:calculadora_imc/pages/empyt_page.dart';
 import 'package:calculadora_imc/repository/imc_repository.dart';
 import 'package:calculadora_imc/shared/widgets/imc_icon_status.dart';
 import 'package:flutter/material.dart';
@@ -34,92 +35,94 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Calculadora de IMC")),
-      body: ListView.builder(
-        itemCount: _imcs.length,
-        itemBuilder: (context, index) {
-          var imc = _imcs[index];
-          return Dismissible(
-              key: Key(imc.id),
-              background: Container(color: Colors.red),
-              onDismissed: (direction) {
-                setState(() {
-                  imcRepository.remover(imc.id);
-                });
-              },
-              child: Card(
-                child: ListTile(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text("Detalhes"),
-                          content: SingleChildScrollView(
-                            child: Column(children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text("Altura: "),
-                                  Text(
-                                    "${imc.altura} m",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text("Peso: "),
-                                  Text("${imc.peso.toString()} kg",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600))
-                                ],
-                              ),
-                              const Divider(),
-                              Center(
-                                child: Column(
-                                  children: [
-                                    Text(imc.valor().toString()),
+      body: _imcs.isEmpty
+          ? const EmpytPage()
+          : ListView.builder(
+              itemCount: _imcs.length,
+              itemBuilder: (context, index) {
+                var imc = _imcs[index];
+                return Dismissible(
+                    key: Key(imc.id),
+                    background: Container(color: Colors.red),
+                    onDismissed: (direction) {
+                      setState(() {
+                        imcRepository.remover(imc.id);
+                      });
+                    },
+                    child: Card(
+                      child: ListTile(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text("Detalhes"),
+                                content: SingleChildScrollView(
+                                  child: Column(children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text("Altura: "),
+                                        Text(
+                                          "${imc.altura} m",
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w600),
+                                        )
+                                      ],
+                                    ),
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    Text(imc.descricao()),
-                                  ],
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text("Peso: "),
+                                        Text("${imc.peso.toString()} kg",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w600))
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    Center(
+                                      child: Column(
+                                        children: [
+                                          Text(imc.valor().toString()),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(imc.descricao()),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    FilledButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("Fechar"))
+                                  ]),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              FilledButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text("Fechar"))
-                            ]),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  leading: IMCIconStatus(imcValor: imc.valor()),
-                  title: Row(children: [
-                    const Text("IMC: "),
-                    Text(
-                      imc.valor().toString(),
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    )
-                  ]),
-                  subtitle: Text(imc.descricao()),
-                ),
-              ));
-        },
-      ),
+                              );
+                            },
+                          );
+                        },
+                        leading: IMCIconStatus(imcValor: imc.valor()),
+                        title: Row(children: [
+                          const Text("IMC: "),
+                          Text(
+                            imc.valor().toString(),
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          )
+                        ]),
+                        subtitle: Text(imc.descricao()),
+                      ),
+                    ));
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
