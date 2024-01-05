@@ -1,10 +1,17 @@
 // ignore_for_file: unnecessary_getters_setters
 
-import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
+part 'imc.g.dart';
+
+@HiveType(typeId: 0)
 class IMC {
-  final String _id = UniqueKey().toString();
+  @HiveField(0)
+  final String _id = const Uuid().v4();
+  @HiveField(1)
   double _peso;
+  @HiveField(2)
   double _altura;
 
   IMC(this._altura, this._peso);

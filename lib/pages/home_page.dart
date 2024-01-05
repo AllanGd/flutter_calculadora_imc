@@ -4,6 +4,7 @@ import 'package:calculadora_imc/repository/imc_repository.dart';
 import 'package:calculadora_imc/shared/widgets/imc_icon_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   var imcRepository = IMCRepository();
   var _imcs = <IMC>[];
   final _formKey = GlobalKey<FormState>();
+  var box = Hive.box<IMC>('imcBox');
 
   @override
   void initState() {
@@ -27,7 +29,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void obterIMCs() {
-    _imcs = imcRepository.listar();
+    _imcs = box.values.toList();
+    // _imcs = imcRepository.listar();
     setState(() {});
   }
 
@@ -182,7 +185,8 @@ class _HomePageState extends State<HomePage> {
                               var imc = IMC(double.parse(alturaController.text),
                                   double.parse(pesoController.text));
                               setState(() {
-                                imcRepository.adicionar(imc);
+                                box.add(imc);
+                                // imcRepository.adicionar(imc);
                               });
                               Navigator.pop(context);
                               alturaController.clear();
