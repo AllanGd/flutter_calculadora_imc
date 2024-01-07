@@ -6,7 +6,6 @@ import 'package:hive_flutter/adapters.dart';
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(IMCAdapter());
-  await Hive.openBox<IMC>('imcBox');
   runApp(MaterialApp(
     theme: ThemeData(primarySwatch: Colors.cyan),
     home: const HomePage(),
